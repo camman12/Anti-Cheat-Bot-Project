@@ -1,5 +1,6 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Header from './Header';
+import Admin from './Admin';
 
 function App() {
   return (
@@ -7,6 +8,7 @@ function App() {
       <CssBaseline />
 
       <Header title="Anti-Cheat Project" />
+      <Admin />
     </div>
   );
 }
