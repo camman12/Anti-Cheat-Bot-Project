@@ -1,3 +1,8 @@
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Header from './Header';
 import Admin from './Admin';
@@ -7,8 +12,15 @@ function App() {
     <div className="App">
       <CssBaseline />
 
-      <Header title="Anti-Cheat Project" />
-      <Admin />
+      <Router>
+        <Header title="Anti-Cheat Project" />
+
+        <Switch>
+          <Route path="/">
+            <Admin />
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }

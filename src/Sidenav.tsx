@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer, { DrawerProps } from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -18,7 +19,7 @@ export default function Sidenav(props: DrawerProps) {
   return (
     <Drawer anchor="left" {...props}>
       <List className={classes.list}>
-        <ListItem button>
+        <ListItem button component={Link} to="/">
           <ListItemIcon><HomeIcon /></ListItemIcon>
           <ListItemText primary="Admin" />
         </ListItem>
