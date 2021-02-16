@@ -22,6 +22,18 @@ const useStyles = makeStyles({
   },
 });
 
+async function uploadKeyword(keyword: string) {
+  const res = await fetch('/keyword', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ keyword }),
+  });
+
+  console.log(res);
+}
+
 export default function Admin() {
   const classes = useStyles();
   const [keywordInput, setKeywordInput] = useState('');
@@ -36,6 +48,8 @@ export default function Admin() {
       const newKeywords = [...keywords, e.target.value];
       setKeywords(newKeywords);
       setKeywordInput('');
+
+      uploadKeyword(e.target.value);
     }
   };
 
