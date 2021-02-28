@@ -47,10 +47,10 @@ import time
 
 
 class Crawler():
-    def __init__(self, keyword, delay):
+    def __init__(self, keywords, delay):
         self.session = HTMLSession()
         # self.keyword_list = self.get_keywords()
-        self.keyword_list = [keyword]
+        self.keyword_list = keywords
         self.base_url = 'https://www.google.com/'
         self.data_list = []
         self.delay = delay
@@ -98,12 +98,19 @@ class Crawler():
 
 
 if __name__ == '__main__':
-    keyword = input('>>>>>>Please enter the request keyword:\n').strip()
+    n = input('>>>>>>Please enter the keyword number:\n').strip()
+    try:
+        n = int(n)
+    except:
+        n = 1
+    keywords = []
+    for i in range(n):
+        keyword = input('>>>>>>Please enter the request keyword:\n').strip()
+        keywords.append(keyword)
     delay_sec = input('>>>>>>Please enter the request delay interval (seconds):\n').strip()
     try:
-        keyword = str(keyword)
         delay_sec = int(delay_sec)
     except:
         delay_sec = 1
-    c = Crawler(keyword, delay_sec)
+    c = Crawler(keywords, delay_sec)
     c.main()
