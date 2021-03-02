@@ -35,7 +35,11 @@ export default function Header({ title }: Props) {
 
   return (
     <>
-      <Sidenav open={drawerOpen} onClose={handleMenuClose} />
+      <Sidenav
+        open={drawerOpen}
+        onClose={handleMenuClose}
+        onListClick={handleMenuClose}
+      />
 
       <AppBar position="static">
         <Toolbar>
