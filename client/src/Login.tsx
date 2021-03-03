@@ -1,5 +1,6 @@
-import { FormEvent } from 'react';
-import { Helmet } from 'react-helmet';
+import { FormEvent, useState } from 'react';
+import { useHistory } from "react-router-dom";
+import { Helmet } from 'react-helmet-async';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -38,12 +39,39 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Login() {
   const classes = useStyles();
+  const history = useHistory();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [failed, setFailed] = useState(false);
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleEmailChange = (e: any) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e: any) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSubmit = async (event: FormEvent) => {
     // Prevent submit, send as JSON
     event.preventDefault();
 
-    console.log('Submitted!');
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (res.ok) {
+      // Set token and redirect
+      const body = await res.json();
+      localStorage.setItem('token', body.access_token);
+      history.push('/');
+    } else {
+      setFailed(true);
+    }
   };
 
   return (
@@ -73,6 +101,9 @@ export default function Login() {
               name="email"
               autoComplete="email"
               autoFocus
+              value={email}
+              onChange={handleEmailChange}
+              error={failed}
             />
 
             <TextField
@@ -85,6 +116,9 @@ export default function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={password}
+              onChange={handlePasswordChange}
+              error={failed}
             />
 
             <FormControlLabel
@@ -108,6 +142,7 @@ export default function Login() {
                   Forgot password?
                 </Link>
               </Grid>
+
               <Grid item>
                 <Link href="#" variant="body2">
                   {"Don't have an account? Sign Up"}

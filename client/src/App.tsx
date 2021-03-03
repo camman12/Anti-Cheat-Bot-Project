@@ -4,35 +4,37 @@ import {
   Route,
 } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Header from './Header';
 import Admin from './Admin';
 import Login from './Login';
 
 function App() {
   return (
-    <div className="App">
-      <CssBaseline />
+    <HelmetProvider>
+      <div className="App">
+        <CssBaseline />
 
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Anti-Cheat Project</title>
-      </Helmet>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Anti-Cheat Project</title>
+        </Helmet>
 
-      <Router>
-        <Header title="Anti-Cheat Project" />
+        <Router>
+          <Header title="Anti-Cheat Project" />
 
-        <Switch>
-          <Route path="/login">
-            <Login />
-          </Route>
+          <Switch>
+            <Route path="/login">
+              <Login />
+            </Route>
 
-          <Route path="/">
-            <Admin />
-          </Route>
-        </Switch>
-      </Router>
-    </div>
+            <Route path="/">
+              <Admin />
+            </Route>
+          </Switch>
+        </Router>
+      </div>
+    </HelmetProvider>
   );
 }
 
