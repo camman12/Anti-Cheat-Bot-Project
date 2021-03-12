@@ -1,22 +1,9 @@
-
 from requests_html import HTMLSession
 from parsel import Selector
 import pandas as pd
 import time
-import sqlite3
-import uuid
+from app import app, db, Data
 
-DATABASE = 'database.db'
-
-def connect_db():
-    return sqlite3.connect(DATABASE)
-
-def query_db(query, args=(), one=False):
-    db = connect_db()
-    cur = db.execute(query, args)
-    rv = [dict((cur.description[idx][0], value)
-               for idx, value in enumerate(row)) for row in cur.fetchall()]
-    return (rv[0] if rv else None) if one else rv
 
 class Crawler():
     def __init__(self, taskid, keywords, delay):
@@ -26,7 +13,6 @@ class Crawler():
         self.base_url = 'https://www.google.com/'
         self.data_list = []
         self.delay = delay
-
 
     def get_keywords(self):
         with open('keywords.txt', 'r', encoding='utf-8-sig') as f:
@@ -59,9 +45,8 @@ class Crawler():
 
     def save(self):
         df = pd.DataFrame(self.data_list)
-        path = f'{str(int(time.time()))}.xlsx'
-        with pd.ExcelWriter(path, engine='xlsxwriter', options={'strings_to_urls': False}) as writer:
-            df.to_excel(writer, index=False, encoding='utf-8-sig')
+        path = f'{str(int(time.time()))}.csv'
+        df.to_csv(path)
 
         task_id = self.taskid
         print(self.data_list)
@@ -69,13 +54,21 @@ class Crawler():
             print(item)
             url = item['url']
 
-            datas = query_db('select * from datas where url = \'' + url + '\'', one=True)
-            if datas == None:
-                data_id = str(uuid.uuid4())
-                with sqlite3.connect("database.db") as con:
-                        cur = con.cursor()
-                        cur.execute("INSERT INTO datas (data_id,task_id,keyword,page,title,desc,url) VALUES (?,?,?,?,?,?,?)",(data_id,task_id,item['keyword'],item['page'],item['title'],item['desc'],item['url']) )
-                        con.commit()
+            with app.app_context():
+                datas = Data.query.filter_by(url=url).first()
+
+                if datas is None:
+                    db.session.add(Data(
+                        task_id=task_id,
+                        keyword=item['keyword'],
+                        page=item['page'],
+                        title=item['title'],
+                        desc=item['desc'],
+                        url=item['url'],
+                    ))
+
+                    db.session.commit()
+
         msg = "Record successfully added"
         return msg
 
@@ -92,7 +85,7 @@ if __name__ == '__main__':
     n = input('>>>>>>Please enter the keyword number:\n').strip()
     try:
         n = int(n)
-    except:
+    except Exception:
         n = 1
     keywords = []
     for i in range(n):
@@ -101,7 +94,7 @@ if __name__ == '__main__':
     delay_sec = input('>>>>>>Please enter the request delay interval (seconds):\n').strip()
     try:
         delay_sec = int(delay_sec)
-    except:
+    except Exception:
         delay_sec = 1
     c = Crawler(keywords, delay_sec)
     c.main()

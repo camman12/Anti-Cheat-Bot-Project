@@ -33,19 +33,45 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
 
-# Create example user
+# Create example user and tasks
 with app.app_context():
     db.create_all()
 
-    if db.session.query(User).filter_by(email='user@example.com').count() < 1:
-        db.session.add(User(
+    user = db.session.query(User).filter_by(email='user@example.com')
+
+    if user.count() < 1:
+        user = User(
           email='user@example.com',
           password=guard.hash_password('strongpassword'),
           roles='admin'
+        )
+
+        db.session.add(user)
+    else:
+        user = user.first()
+
+    if db.session.query(Task).count() < 1:
+        db.session.add(Task(
+            user=user,
+            delay_sec=1,
+            status=0,
+            keywords='tests',
+        ))
+        db.session.add(Task(
+            user=user,
+            delay_sec=1,
+            status=0,
+            keywords='cheating,osu',
+        ))
+        db.session.add(Task(
+            user=user,
+            delay_sec=1,
+            status=0,
+            keywords='fun',
         ))
 
     db.session.commit()
 
 
 from app.views import index  # noqa
-from app.views.api import keyword, login, profile  # noqa
+from app.views.api import crawler, keyword, login, profile, register  # noqa
