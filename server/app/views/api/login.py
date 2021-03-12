@@ -1,6 +1,7 @@
 from flask import request
 from app import app, guard
 
+
 @app.route('/api/login', methods=['POST'])
 def login():
     """
