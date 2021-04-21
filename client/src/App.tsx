@@ -8,6 +8,8 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Header from './Header';
 import Admin from './Admin';
 import Login from './Login';
+import Monitor from './Monitor';
+import { PrivateRoute } from './auth';
 
 function App() {
   return (
@@ -28,9 +30,13 @@ function App() {
               <Login />
             </Route>
 
-            <Route path="/">
+            <PrivateRoute path="/monitor">
+              <Monitor />
+            </PrivateRoute>
+
+            <PrivateRoute path="/">
               <Admin />
-            </Route>
+            </PrivateRoute>
           </Switch>
         </Router>
       </div>

@@ -9,6 +9,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import LockIcon from '@material-ui/icons/Lock';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import HomeIcon from '@material-ui/icons/Home';
+import ListIcon from '@material-ui/icons/List';
 import { isLoggedIn, logout } from './auth';
 
 const useStyles = makeStyles({
@@ -30,6 +31,11 @@ export default function Sidenav({ onListClick, ...props }: Props & DrawerProps) 
         <ListItem button component={Link} to="/">
           <ListItemIcon><HomeIcon /></ListItemIcon>
           <ListItemText primary="Admin" />
+        </ListItem>
+
+        <ListItem button component={Link} to="/monitor">
+          <ListItemIcon><ListIcon /></ListItemIcon>
+          <ListItemText primary="Monitor" />
         </ListItem>
 
         {!isLoggedIn() ?
