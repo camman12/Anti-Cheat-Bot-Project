@@ -3,7 +3,7 @@ Flask==1.1.2
 Flask-APScheduler==1.11.0
 Flask-Cors==3.0.10
 flask-praetorian==1.1.0
-Flask-SQLAlchemy==2.4.4
+Flask-SQLAlchemy==2.5.1
 pandas==1.2.3
 parsel==1.6.0
 requests-html==0.10.0
