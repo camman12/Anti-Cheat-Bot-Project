@@ -1,5 +1,5 @@
 import { MouseEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer, { DrawerProps } from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -24,6 +24,12 @@ interface Props {
 
 export default function Sidenav({ onListClick, ...props }: Props & DrawerProps) {
   const classes = useStyles();
+  const history = useHistory();
+
+  const handleLogout = () => {
+    logout();
+    history.push('/login');
+  };
 
   return (
     <Drawer anchor="left" {...props}>
@@ -43,7 +49,7 @@ export default function Sidenav({ onListClick, ...props }: Props & DrawerProps) 
             <ListItemIcon><LockIcon /></ListItemIcon>
             <ListItemText primary="Login" />
           </ListItem>
-        : <ListItem button onClick={logout}>
+        : <ListItem button onClick={handleLogout}>
             <ListItemIcon><ExitToAppIcon /></ListItemIcon>
             <ListItemText primary="Logout" />
           </ListItem>

@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
