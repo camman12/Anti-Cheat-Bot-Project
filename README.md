@@ -1,5 +1,7 @@
 # Anti-Cheat Bot
 
+## Setup
+
 To start the bot, first install dependencies for both the client and server. In the server folder, use `python -m venv venv` to create a virtual environment. Then,
 run `venv/bin/activate` to start the virtual environment. Then install dependencies with `pip install -r requrements.txt`. Once you've done this, you can start the server
 using `python run.py`.
