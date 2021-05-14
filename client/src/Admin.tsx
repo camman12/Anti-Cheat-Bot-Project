@@ -10,6 +10,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 
 const useStyles = makeStyles({
   root: {
@@ -23,7 +27,7 @@ const useStyles = makeStyles({
 });
 
 async function uploadKeyword(keyword: string) {
-  const res = await fetch('/keyword', {
+  const res = await fetch('/api/keyword', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -59,8 +63,17 @@ export default function Admin() {
     setFreq(e.target.value);
   };
 
+  const handleDeleteKeyword = (index: number) => {
+    const newKeywords = [...keywords];
+    newKeywords.splice(index, 1);
+    setKeywords(newKeywords);
+  };
+
   return (
     <Container maxWidth="lg">
+      <Box marginBottom={1} marginTop={1}>
+          <Typography variant="h2">User configuration</Typography>
+      </Box>
       <Grid container spacing={3} className={classes.root}>
         <Grid item xs={6}>
           <TextField
@@ -75,6 +88,9 @@ export default function Admin() {
             {keywords.map((keyword, i) => (
               <ListItem button key={i}>
                 <ListItemText primary={keyword} />
+                <IconButton onClick={() => handleDeleteKeyword(i)}>
+                  <CloseIcon />
+                </IconButton>
               </ListItem>
             ))}
           </List>

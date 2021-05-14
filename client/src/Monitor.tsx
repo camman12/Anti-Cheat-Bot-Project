@@ -24,7 +24,7 @@ export default function Monitor() {
           <Typography variant="h2">Bot Log</Typography>
         </Box>
 
-        <Paper style={{ maxHeight: 500, overflow: 'auto' }}>
+        <Paper style={{ maxHeight: 800, overflow: 'auto' }}>
           <List>
             {eventLog.map((event, i) => (
               <ListItem button key={i}>
