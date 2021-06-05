@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -26,22 +26,52 @@ const useStyles = makeStyles({
   },
 });
 
+async function fetchKeywords() {
+  const res = await fetch('/api/keywords', {
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token') as any}`,
+    },
+  });
+
+  const body = await res.json();
+  return body.keywords;
+}
+
 async function uploadKeyword(keyword: string) {
   const res = await fetch('/api/keyword', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token') as any}`,
     },
     body: JSON.stringify({ keyword }),
   });
+}
 
-  console.log(res);
+async function deleteKeyword(keyword: string) {
+  const res = await fetch('/api/keyword/delete', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token') as any}`,
+    },
+    body: JSON.stringify({ keyword }),
+  });
 }
 
 export default function Admin() {
   const classes = useStyles();
   const [keywordInput, setKeywordInput] = useState('');
   const [keywords, setKeywords] = useState([] as string[]);
+
+  useEffect(() => {
+    async function set() {
+      const k = await fetchKeywords();
+      setKeywords(k);
+    }
+
+    set();
+  }, []);
 
   const handleChange = (e: any) => {
     setKeywordInput(e.target.value);
@@ -65,8 +95,10 @@ export default function Admin() {
 
   const handleDeleteKeyword = (index: number) => {
     const newKeywords = [...keywords];
-    newKeywords.splice(index, 1);
+    const deleted = newKeywords.splice(index, 1);
     setKeywords(newKeywords);
+
+    deleteKeyword(deleted[0]);
   };
 
   return (

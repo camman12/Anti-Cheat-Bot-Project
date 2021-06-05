@@ -1,22 +1,17 @@
 from app import app, db, Task
+from app.models import User
 from crawler.google import Crawler
 
 
 def shishi():
     with app.app_context():
-        datas = Task.query.filter_by(status=0)
-        print(datas)
+        users = User.query.all()
 
-        for data in datas:
-            data.status = 1
-            # print(data)
-            print(data.id)
-            print(data.keywords)
-            print(data.delay_sec)
-            task_id = data.id
-            keywords = data.keywords.split(',')
-            delay_sec = data.delay_sec
-            c = Crawler(task_id, keywords, delay_sec)
+        for user in users:
+            if len(user.keywords) == 0:
+                continue
+
+            keywords = [keyword.text for keyword in user.keywords]
+
+            c = Crawler(0, keywords, 1)
             c.main()
-
-        db.session.commit()
